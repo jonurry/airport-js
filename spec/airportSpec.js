@@ -4,7 +4,7 @@ describe('Airport', function() {
   let weather;
 
   beforeEach(function() {
-    weather = new Weather();
+    weather = jasmine.createSpyObj('weather', ['forecast']);
     airport = new Airport(weather);
     plane = jasmine.createSpyObj('plane', ['setFlyingStatus']);
   });
@@ -15,11 +15,12 @@ describe('Airport', function() {
     });
   });
 
-  describe('sunny weather:', function() {
-    beforeEach(function() {
-      spyOn(weather, 'forecast').and.returnValue('sunny');
-    });
-    describe('landPlane', function() {
+  describe('landPlane', function() {
+    describe('sunny weather', function() {
+      beforeEach(function() {
+        weather.forecast.and.returnValue('sunny');
+      });
+
       it('plane should be on ground', function() {
         airport.landPlane(plane);
         expect(plane.setFlyingStatus).toHaveBeenCalled();
@@ -29,6 +30,13 @@ describe('Airport', function() {
         airport.landPlane(plane);
         expect(airport.hanger).toContain(plane);
       });
+    });
+  });
+
+  describe('isStormy', function() {
+    it('should delegate weather forecast', function() {
+      airport.isStormy();
+      expect(weather.forecast).toHaveBeenCalled();
     });
   });
 });

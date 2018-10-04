@@ -20,6 +20,13 @@ Airport.prototype.landPlane = function(plane) {
 };
 
 Airport.prototype.takeOffPlane = function(plane) {
+  if (this.weather.forecast() === 'stormy') {
+    throw new WeatherError('Too stormy to take off.');
+  }
   plane.setFlyingStatus(true);
   this.hanger = this.hanger.filter(element => element != plane);
+};
+
+Airport.prototype.isStormy = function() {
+  return this.weather.forecast() === 'stormy';
 };
