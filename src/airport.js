@@ -16,25 +16,17 @@ Airport.prototype.planes = function() {
 };
 
 Airport.prototype.landPlane = function(plane) {
-  if (this.isStormy()) {
-    throw new WeatherError('Too stormy to land.');
+  if (this.canLandPlane(plane)) {
+    plane.setFlyingStatus(false);
+    this.hanger.push(plane);
   }
-  if (this.isFull()) {
-    throw new WeatherError('Cannot land. Airport is at full capacity.');
-  }
-  plane.setFlyingStatus(false);
-  this.hanger.push(plane);
 };
 
 Airport.prototype.takeOffPlane = function(plane) {
-  if (this.isStormy()) {
-    throw new WeatherError('Too stormy to take off.');
+  if (this.canTakeOffPlane(plane)) {
+    plane.setFlyingStatus(true);
+    this.hanger = this.hanger.filter(element => element != plane);
   }
-  if (!this.inHanger(plane)) {
-    throw new AirportError('The plane is not at this airport.');
-  }
-  plane.setFlyingStatus(true);
-  this.hanger = this.hanger.filter(element => element != plane);
 };
 
 Airport.prototype.isFull = function() {
@@ -45,6 +37,24 @@ Airport.prototype.isStormy = function() {
   return this.weather.forecast() === 'stormy';
 };
 
-Airport.prototype.inHanger = function(plane) {
+Airport.prototype.isInHanger = function(plane) {
   return this.hanger.includes(plane);
+};
+
+Airport.prototype.canLandPlane = function(plane) {
+  if (this.isStormy()) throw new WeatherError('Too stormy to land.');
+  if (this.isFull())
+    throw new AirportError('Cannot land. Airport is at full capacity.');
+  if (this.isInHanger(plane))
+    throw new AirportError('The plane is already at the airport.');
+  if (!plane.isFlying())
+    throw new AirportError('The plane is already grounded.');
+  return true;
+};
+
+Airport.prototype.canTakeOffPlane = function(plane) {
+  if (this.isStormy()) throw new WeatherError('Too stormy to take off.');
+  if (!this.isInHanger(plane))
+    throw new AirportError('The plane is not at this airport.');
+  return true;
 };

@@ -6,7 +6,7 @@ describe('Airport', function() {
   beforeEach(function() {
     weather = jasmine.createSpyObj('weather', ['forecast']);
     airport = new Airport(weather);
-    plane = jasmine.createSpyObj('plane', ['setFlyingStatus']);
+    plane = jasmine.createSpyObj('plane', ['setFlyingStatus', 'isFlying']);
   });
 
   describe('constructor', function() {
@@ -19,6 +19,7 @@ describe('Airport', function() {
     describe('sunny weather', function() {
       beforeEach(function() {
         weather.forecast.and.returnValue('sunny');
+        plane.isFlying.and.returnValue(true);
         airport.landPlane(plane);
       });
 
@@ -33,13 +34,39 @@ describe('Airport', function() {
       describe('when airport capacity is full', function() {
         it('should not land', function() {
           for (let i = 2; i <= airport.capacity; i++) {
-            let plane = jasmine.createSpyObj('plane', ['setFlyingStatus']);
+            let plane = jasmine.createSpyObj('plane', [
+              'setFlyingStatus',
+              'isFlying'
+            ]);
+            plane.isFlying.and.returnValue(true);
             airport.landPlane(plane);
           }
           expect(function() {
-            let plane = jasmine.createSpyObj('plane', ['setFlyingStatus']);
+            let plane = jasmine.createSpyObj('plane', [
+              'setFlyingStatus',
+              'isFlying'
+            ]);
+            plane.isFlying.and.returnValue(true);
             airport.landPlane(plane);
           }).toThrowError('Cannot land. Airport is at full capacity.');
+        });
+      });
+
+      describe('already at the airport', function() {
+        it('should throw an error', function() {
+          expect(function() {
+            airport.landPlane(plane);
+          }).toThrowError('The plane is already at the airport.');
+        });
+      });
+
+      describe('already grounded', function() {
+        it('should throw an error', function() {
+          expect(function() {
+            let anotherAirport = new Airport(weather);
+            plane.isFlying.and.returnValue(false);
+            anotherAirport.landPlane(plane);
+          }).toThrowError('The plane is already grounded.');
         });
       });
     });
@@ -58,6 +85,7 @@ describe('Airport', function() {
   describe('takeOffPlane', function() {
     beforeEach(function() {
       weather.forecast.and.returnValue('sunny');
+      plane.isFlying.and.returnValue(true);
       airport.landPlane(plane);
     });
 
