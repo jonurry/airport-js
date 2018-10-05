@@ -39,11 +39,25 @@ describe('Feature Tests', function() {
 
   describe('ATC instructs plane to land at airport', function() {
     describe('sunny weather', function() {
-      it('should land the plane', function() {
+      beforeEach(function() {
         spyOn(weather, 'forecast').and.returnValue('sunny');
         plane.land(airport);
+      });
+
+      it('should land the plane', function() {
         expect(airport.planes()).toContain(plane);
         expect(plane.isFlying()).toEqual(false);
+      });
+
+      it('should not land the plane when airport is full', function() {
+        for (let i = 2; i <= airport.capacity; i++) {
+          let plane = new Plane();
+          plane.land(airport);
+        }
+        expect(function() {
+          let plane = new Plane();
+          plane.land(airport);
+        }).toThrowError('Cannot land. Airport is at full capacity.');
       });
     });
 

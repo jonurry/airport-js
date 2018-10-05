@@ -29,6 +29,18 @@ describe('Airport', function() {
       it('plane should be in the hanger', function() {
         expect(airport.hanger).toContain(plane);
       });
+      describe('when airport capacity is full', function() {
+        it('should not land', function() {
+          for (let i = 2; i <= airport.capacity; i++) {
+            let plane = jasmine.createSpyObj('plane', ['setFlyingStatus']);
+            airport.landPlane(plane);
+          }
+          expect(function() {
+            let plane = jasmine.createSpyObj('plane', ['setFlyingStatus']);
+            airport.landPlane(plane);
+          }).toThrowError('Cannot land. Airport is at full capacity.');
+        });
+      });
     });
 
     describe('stormy weather', function() {
