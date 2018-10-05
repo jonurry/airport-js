@@ -62,6 +62,7 @@ describe('Feature Tests', function() {
       spyOn(weather, 'forecast').and.returnValue('sunny');
       plane.land(airport);
     });
+
     describe('sunny weather', function() {
       it('plane should take off', function() {
         plane.takeOff(airport);
@@ -73,7 +74,6 @@ describe('Feature Tests', function() {
     describe('storm weather', function() {
       it('should not allow the plane to land', function() {
         weather.forecast.and.returnValue('stormy');
-        //spyOn(weather, 'forecast').and.returnValue('stormy');
         expect(function() {
           plane.takeOff(airport);
         }).toThrowError('Too stormy to take off.');

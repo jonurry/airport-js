@@ -19,16 +19,25 @@ describe('Airport', function() {
     describe('sunny weather', function() {
       beforeEach(function() {
         weather.forecast.and.returnValue('sunny');
+        airport.landPlane(plane);
       });
 
-      it('plane should be on ground', function() {
-        airport.landPlane(plane);
+      it('plane should be grounded', function() {
         expect(plane.setFlyingStatus).toHaveBeenCalled();
       });
 
       it('plane should be in the hanger', function() {
-        airport.landPlane(plane);
         expect(airport.hanger).toContain(plane);
+      });
+    });
+
+    describe('stormy weather', function() {
+      it('should not land due to weather', function() {
+        weather.forecast.and.returnValue('stormy');
+        expect(function() {
+          airport.landPlane(plane);
+        }).toThrowError('Too stormy to land.');
+        expect(airport.hanger).not.toContain(plane);
       });
     });
   });
