@@ -60,4 +60,16 @@ describe('Airport', function() {
       expect(weather.forecast).toHaveBeenCalled();
     });
   });
+
+  describe('airport capacity', function() {
+    it('should default to 20 planes', function() {
+      expect(airport.capacity).toEqual(CAPACITY);
+    });
+
+    it('can be over-ridden with a different capacity', function() {
+      let capacity = 50;
+      let largeAirport = new Airport(weather, capacity);
+      expect(largeAirport.capacity).toEqual(capacity);
+    });
+  });
 });
