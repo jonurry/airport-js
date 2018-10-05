@@ -93,5 +93,16 @@ describe('Feature Tests', function() {
         }).toThrowError('Too stormy to take off.');
       });
     });
+
+    describe('take off from a different airport', function() {
+      it('should not take off and raise an error', function() {
+        let differentAirport = new Airport(weather);
+        expect(function() {
+          plane.takeOff(differentAirport);
+        }).toThrowError('The plane is not at this airport.');
+        expect(airport.planes()).toContain(plane);
+        expect(plane.isFlying()).toEqual(false);
+      });
+    });
   });
 });

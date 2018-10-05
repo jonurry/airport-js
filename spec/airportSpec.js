@@ -29,6 +29,7 @@ describe('Airport', function() {
       it('plane should be in the hanger', function() {
         expect(airport.hanger).toContain(plane);
       });
+
       describe('when airport capacity is full', function() {
         it('should not land', function() {
           for (let i = 2; i <= airport.capacity; i++) {
@@ -50,6 +51,38 @@ describe('Airport', function() {
           airport.landPlane(plane);
         }).toThrowError('Too stormy to land.');
         expect(airport.hanger).not.toContain(plane);
+      });
+    });
+  });
+
+  describe('takeOffPlane', function() {
+    beforeEach(function() {
+      weather.forecast.and.returnValue('sunny');
+      airport.landPlane(plane);
+    });
+
+    describe('sunny weather', function() {
+      it('the plane should take off', function() {
+        airport.takeOffPlane(plane);
+        expect(airport.planes.length).toEqual(0);
+        expect(airport.planes).not.toContain(plane);
+      });
+
+      it('should not take off if not at the airport', function() {
+        airport.takeOffPlane(plane);
+        expect(function() {
+          airport.takeOffPlane(plane);
+        }).toThrowError('The plane is not at this airport.');
+      });
+    });
+
+    describe('stormy weather', function() {
+      it('should not take off due to weather', function() {
+        weather.forecast.and.returnValue('stormy');
+        expect(function() {
+          airport.takeOffPlane(plane);
+        }).toThrowError('Too stormy to take off.');
+        expect(airport.planes()).toContain(plane);
       });
     });
   });

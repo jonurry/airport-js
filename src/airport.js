@@ -3,6 +3,7 @@
 const CAPACITY = 20;
 
 class WeatherError extends Error {}
+class AirportError extends Error {}
 
 function Airport(weather = new Weather(), capacity = CAPACITY) {
   this.capacity = capacity;
@@ -29,6 +30,9 @@ Airport.prototype.takeOffPlane = function(plane) {
   if (this.isStormy()) {
     throw new WeatherError('Too stormy to take off.');
   }
+  if (!this.inHanger(plane)) {
+    throw new AirportError('The plane is not at this airport.');
+  }
   plane.setFlyingStatus(true);
   this.hanger = this.hanger.filter(element => element != plane);
 };
@@ -39,4 +43,8 @@ Airport.prototype.isFull = function() {
 
 Airport.prototype.isStormy = function() {
   return this.weather.forecast() === 'stormy';
+};
+
+Airport.prototype.inHanger = function(plane) {
+  return this.hanger.includes(plane);
 };
