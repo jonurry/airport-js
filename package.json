@@ -1,0 +1,33 @@
+{
+  "name": "airport",
+  "version": "1.0.0",
+  "description": "javascript airport challenge",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "dependencies": {
+    "jasmine": "^3.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "open SpecRunner.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jonurry/airport-js.git"
+  },
+  "keywords": [
+    "javascript",
+    "js",
+    "airport",
+    "challenge",
+    "makers"
+  ],
+  "author": "Jon Urry",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jonurry/airport-js/issues"
+  },
+  "homepage": "https://github.com/jonurry/airport-js#readme"
+}
