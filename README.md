@@ -12,7 +12,7 @@ All javascript objects follow the single responsibility principle where each obj
 
 The code objects show high cohesion and low coupling. Dependencies are injected into objects that rely on other objects to function correctly.
 
-I made good use of mocking and stubing when unit testing. e.g. all objects can be individually unit tested through moking dependencies. The random behaviour of the weather object is overridden with a stub where appropriate.
+I made good use of mocking and stubing when unit testing. e.g. all objects can be individually unit tested through mocking dependencies. The random behaviour of the weather object is overridden with a stub where appropriate.
 
 ## Get Started
 
@@ -25,3 +25,16 @@ I made good use of mocking and stubing when unit testing. e.g. all objects can b
   or
 
   - `open SpecRunner.html`
+
+## Approach to testing
+
+The feature and unit tests were implemented in Jasmine.
+
+I used the red, green, refactor process whilst testing.
+
+1. Test drive a feature
+2. When this fails create a unit test for a class that matches the failure
+3. Fix the failure by implementing code to pass the tests
+4. It may require further unit tests and code to fully satisfy the feature test
+5. Refactor
+6. Try to complete each cycle in 15 mins
